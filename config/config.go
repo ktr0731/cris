@@ -5,6 +5,7 @@ import "github.com/kelseyhightower/envconfig"
 type Config struct {
 	Meta   *Meta
 	Server *Server
+	Logger *Logger
 }
 
 type Meta struct {
@@ -14,6 +15,11 @@ type Meta struct {
 type Server struct {
 	Host string `default:""`
 	Port string `default:"8080"`
+}
+
+type Logger struct {
+	Output string `default:"stdout"`
+	Prefix string `default:"[cris] "`
 }
 
 var config Config

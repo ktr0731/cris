@@ -2,9 +2,11 @@ package main
 
 import (
 	"github.com/k0kubun/pp"
+	"github.com/ktr0731/cris/adapters/presenters"
 	"github.com/ktr0731/cris/adapters/servers"
 	"github.com/ktr0731/cris/config"
 	"github.com/ktr0731/cris/log"
+	"github.com/ktr0731/cris/usecases"
 )
 
 func main() {
@@ -17,7 +19,15 @@ func main() {
 
 	pp.Println(config)
 
-	if err := servers.NewHTTPServer(logger, config).Listen(); err != nil {
+	interactor := usecases.NewInteractor(
+		logger,
+		config,
+		presenters.NewHTTPPresenter(logger, config),
+		nil,
+		nil,
+	)
+
+	if err := servers.NewHTTPServer(logger, config, interactor).Listen(); err != nil {
 		panic(err)
 	}
 }

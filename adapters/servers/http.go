@@ -1,11 +1,15 @@
 package servers
 
 import (
+	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/ktr0731/cris/config"
 	"github.com/ktr0731/cris/log"
+	"github.com/ktr0731/cris/usecases/ports"
 )
 
 type Server struct {
@@ -15,13 +19,13 @@ type Server struct {
 	mux *http.ServeMux
 }
 
-func NewHTTPServer(logger *log.Logger, config *config.Config) *Server {
+func NewHTTPServer(logger *log.Logger, config *config.Config, inputPort ports.ServerInputPort) *Server {
 	s := Server{
 		logger: logger,
 		config: config,
 		mux:    http.NewServeMux(),
 	}
-	s.mux.Handle(s.getPrefix()+"/files", newFileHandler(config))
+	s.mux.Handle(s.getPrefix()+"/files", newFileHandler(config, inputPort))
 	return &s
 }
 
@@ -39,51 +43,79 @@ func (s *Server) getAddr() string {
 }
 
 type FileHandler struct {
-	logger   *log.Logger
-	upload   http.Handler
-	download http.Handler
+	logger *log.Logger
+
+	inputPort ports.ServerInputPort
+}
+
+func newFileHandler(config *config.Config, inputPort ports.ServerInputPort) http.Handler {
+	logger, err := log.NewLogger(config)
+	if err != nil {
+		panic(err)
+	}
+	return withLogging(config, logger, &FileHandler{
+		logger:    logger,
+		inputPort: inputPort,
+	})
 }
 
 func (h *FileHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
-	case http.MethodGet:
-		h.download.ServeHTTP(w, r)
-
 	case http.MethodPost:
-		h.upload.ServeHTTP(w, r)
-
+		h.uploadFile(w, r)
+	case http.MethodGet:
+		h.downloadFile(w, r)
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		return
 	}
 }
 
-func newFileHandler(config *config.Config) http.Handler {
-	logger, err := log.NewLogger(config)
-	if err != nil {
-		panic(err)
-	}
-	return withLogging(config, logger, &FileHandler{
-		logger:   logger,
-		upload:   &uploadHandler{logger},
-		download: &downloadHandler{logger},
+func (h *FileHandler) uploadFile(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+	res, err := h.inputPort.UploadFile(&ports.UploadFileParams{
+		Content: r.Body,
 	})
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprint(w, err)
+	}
+	if err := json.NewEncoder(w).Encode(res); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprint(w, err)
+	}
+	return
 }
 
-type uploadHandler struct {
-	logger *log.Logger
-}
+func (h *FileHandler) downloadFile(w http.ResponseWriter, r *http.Request) {
+	p := r.URL.Path
 
-func (h *uploadHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	h.logger.Println("upload")
-}
+	// allowed format: /v1/files/token.hash.privkey
+	sp := strings.Split(p, "/")
+	if len(sp) != 4 {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
 
-type downloadHandler struct {
-	logger *log.Logger
-}
+	vals := strings.Split(sp[2], ".")
+	if len(vals) != 3 {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
 
-func (h *downloadHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	h.logger.Println("download")
+	privKey, err := base64.StdEncoding.DecodeString(vals[2])
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	h.inputPort.DownloadFile(&ports.DownloadFileParams{
+		Token:   vals[0],
+		TxHash:  vals[1],
+		PrivKey: privKey,
+	})
+
+	return
 }
 
 type logHandler struct {

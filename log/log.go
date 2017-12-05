@@ -14,7 +14,13 @@ type Logger struct {
 	out io.Writer
 }
 
+var logger *Logger
+
 func NewLogger(config *config.Config) (*Logger, error) {
+	if logger != nil {
+		return logger, nil
+	}
+
 	var out io.Writer
 	switch config.Logger.Output {
 	case "stdout":

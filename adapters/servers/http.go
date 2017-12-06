@@ -7,8 +7,10 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/k0kubun/pp"
 	"github.com/ktr0731/cris/config"
 	"github.com/ktr0731/cris/log"
+	"github.com/ktr0731/cris/usecases"
 	"github.com/ktr0731/cris/usecases/ports"
 )
 
@@ -60,31 +62,36 @@ func newFileHandler(config *config.Config, inputPort ports.ServerInputPort) http
 }
 
 func (h *FileHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	var res interface{}
+	var err error
 	switch r.Method {
 	case http.MethodPost:
-		h.uploadFile(w, r)
+		res, err = h.uploadFile(w, r)
 	case http.MethodGet:
 		h.downloadFile(w, r)
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		return
 	}
-}
 
-func (h *FileHandler) uploadFile(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
-	res, err := h.inputPort.UploadFile(&ports.UploadFileParams{
-		Content: r.Body,
-	})
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprint(w, err)
+		handleError(w, err)
+		return
 	}
+
 	if err := json.NewEncoder(w).Encode(res); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprint(w, err)
+		fmt.Fprintln(w, err)
+		return
 	}
-	return
+}
+
+func (h *FileHandler) uploadFile(w http.ResponseWriter, r *http.Request) (interface{}, error) {
+	defer r.Body.Close()
+
+	return h.inputPort.UploadFile(&ports.UploadFileParams{
+		Content: r.Body,
+	})
 }
 
 func (h *FileHandler) downloadFile(w http.ResponseWriter, r *http.Request) {
@@ -133,4 +140,14 @@ func withLogging(config *config.Config, logger *log.Logger, h http.Handler) http
 		logger:  logger,
 		handler: h,
 	}
+}
+
+func handleError(w http.ResponseWriter, err error) {
+	pp.Println(err)
+	if _, ok := err.(usecases.ClientError); ok {
+		w.WriteHeader(http.StatusBadRequest)
+	} else {
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+	fmt.Fprintln(w, err)
 }

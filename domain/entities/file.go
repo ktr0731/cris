@@ -1,6 +1,6 @@
 package entities
 
-import uuid "github.com/satori/go.uuid"
+import "github.com/ktr0731/cris/utils"
 
 type FileID string
 
@@ -11,7 +11,7 @@ type File struct {
 
 func NewFile(url string) *File {
 	return &File{
-		ID:  FileID(uuid.NewV4().String()),
+		ID:  FileID(utils.NewUUID()),
 		URL: url,
 	}
 }

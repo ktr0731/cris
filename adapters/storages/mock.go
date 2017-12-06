@@ -36,7 +36,7 @@ func (s *MockStorageAdapter) Upload(name string, content io.Reader) (string, err
 	return url, nil
 }
 
-func (s *MockStorageAdapter) Download(url string) (io.Reader, error) {
+func (s *MockStorageAdapter) Download(url string) (io.ReadCloser, error) {
 	v, ok := s.url.Load(url)
 	if !ok {
 		return nil, repositories.ErrNotFound
@@ -54,7 +54,7 @@ func (s *MockStorageAdapter) Download(url string) (io.Reader, error) {
 	if !ok {
 		return nil, errors.New("type assertion failed")
 	}
-	return r, nil
+	return ioutil.NopCloser(r), nil
 }
 
 func NewMockStorage() *MockStorageAdapter {

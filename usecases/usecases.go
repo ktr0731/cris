@@ -1,6 +1,8 @@
 package usecases
 
 import (
+	"io/ioutil"
+
 	"github.com/ktr0731/cris/config"
 	"github.com/ktr0731/cris/domain/entities"
 	"github.com/ktr0731/cris/domain/repositories"
@@ -40,9 +42,37 @@ func (c *container) downloadFile(
 	outputPort ports.ServerOutputPort,
 	storagePort ports.StoragePort,
 	blockchainPort ports.BlockchainPort,
+	cryptoPort ports.CryptoPort,
 	fileRepository repositories.FileRepository,
 ) (*ports.DownloadFileResponse, error) {
-	return nil, nil
+	tx, err := blockchainPort.FindTxByHash(params.TxHash)
+	if err != nil {
+		return nil, err
+	}
+
+	file, err := fileRepository.Find(params.Token)
+	if err != nil {
+		return nil, err
+	}
+
+	res, err := storagePort.Download(file.URL)
+	if err != nil {
+		return nil, err
+	}
+	defer res.Close()
+
+	b, err := ioutil.ReadAll(res)
+	if err != nil {
+		return nil, err
+	}
+
+	if cryptoPort.HashDigest(b) != tx.Hash {
+		return nil, ErrTemperingDetected
+	}
+
+	return &ports.DownloadFileResponse{
+		Content: b,
+	}, nil
 }
 
 func newUsecaseContainer(logger *log.Logger, config *config.Config) *container {

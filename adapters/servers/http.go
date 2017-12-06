@@ -1,13 +1,13 @@
 package servers
 
 import (
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"strings"
 
 	"github.com/ktr0731/cris/config"
+	"github.com/ktr0731/cris/domain/entities"
 	"github.com/ktr0731/cris/log"
 	"github.com/ktr0731/cris/usecases"
 	"github.com/ktr0731/cris/usecases/ports"
@@ -97,7 +97,7 @@ func (h *FileHandler) uploadFile(w http.ResponseWriter, r *http.Request) (interf
 func (h *FileHandler) downloadFile(w http.ResponseWriter, r *http.Request) {
 	p := r.URL.Path
 
-	// allowed format: /v1/files/token.hash.privkey
+	// allowed format: /v1/files/token.hash
 	sp := strings.Split(p, "/")
 	if len(sp) != 4 {
 		w.WriteHeader(http.StatusBadRequest)
@@ -105,21 +105,14 @@ func (h *FileHandler) downloadFile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	vals := strings.Split(sp[2], ".")
-	if len(vals) != 3 {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
-	privKey, err := base64.StdEncoding.DecodeString(vals[2])
-	if err != nil {
+	if len(vals) != 2 {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
 	h.inputPort.DownloadFile(&ports.DownloadFileParams{
-		Token:   vals[0],
-		TxHash:  vals[1],
-		PrivKey: privKey,
+		Token:  entities.FileID(vals[0]),
+		TxHash: vals[1],
 	})
 
 	return

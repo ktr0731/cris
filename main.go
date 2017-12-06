@@ -2,6 +2,8 @@ package main
 
 import (
 	"github.com/k0kubun/pp"
+	"github.com/ktr0731/cris/adapters/blockchains"
+	"github.com/ktr0731/cris/adapters/crypto"
 	"github.com/ktr0731/cris/adapters/repositories"
 	"github.com/ktr0731/cris/adapters/servers"
 	"github.com/ktr0731/cris/adapters/storages"
@@ -26,6 +28,8 @@ func main() {
 		config,
 		presenters.NewHTTPPresenter(logger, config),
 		storages.NewMockStorage(),
+		blockchains.NewMockBlockchain(),
+		crypto.NewCryptoAdapter(),
 		repositories.NewMockFileRepository(logger, config),
 	)
 

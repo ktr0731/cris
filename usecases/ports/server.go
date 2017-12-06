@@ -16,9 +16,8 @@ type UploadFileParams struct {
 }
 
 type DownloadFileParams struct {
-	Token   string
-	TxHash  string
-	PrivKey []byte
+	Token  entities.FileID
+	TxHash string
 }
 
 type ServerOutputPort interface {

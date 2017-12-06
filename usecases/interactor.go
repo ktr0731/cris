@@ -13,6 +13,7 @@ type Interactor struct {
 
 	outputPort     ports.ServerOutputPort
 	storagePort    ports.StoragePort
+	cryptoPort     ports.CryptoPort
 	fileRepository repositories.FileRepository
 }
 
@@ -30,6 +31,8 @@ func NewInteractor(
 	config *config.Config,
 	outputPort ports.ServerOutputPort,
 	storagePort ports.StoragePort,
+	blockchainPort ports.BlockchainPort,
+	cryptoPort ports.CryptoPort,
 	fileRepository repositories.FileRepository,
 ) *Interactor {
 	return &Interactor{
@@ -37,6 +40,7 @@ func NewInteractor(
 
 		outputPort:     outputPort,
 		storagePort:    storagePort,
+		cryptoPort:     cryptoPort,
 		fileRepository: fileRepository,
 	}
 }

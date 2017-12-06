@@ -32,7 +32,7 @@ func (a *MockBlockchainAdapter) CreateTx(hash string, content io.Reader) (*dto.T
 		return nil, err
 	}
 	tx := &dto.Transaction{
-		Data: b,
+		HashedData: string(b),
 	}
 	a.store.Store(hash, tx)
 	return tx, nil

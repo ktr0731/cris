@@ -66,7 +66,7 @@ func (c *container) downloadFile(
 		return nil, err
 	}
 
-	if cryptoPort.HashDigest(b) != tx.Hash {
+	if cryptoPort.HashDigest(b) != tx.HashedData {
 		return nil, ErrTemperingDetected
 	}
 

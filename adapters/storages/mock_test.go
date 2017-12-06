@@ -1,6 +1,8 @@
 package storages
 
 import (
+	"io"
+	"io/ioutil"
 	"strings"
 	"testing"
 
@@ -39,7 +41,7 @@ func TestMockStorageAdapter_Download(t *testing.T) {
 	url, err := storage.Upload(key, expected)
 	v, err := storage.Download(url)
 	require.NoError(t, err)
-	actual, ok := v.(*strings.Reader)
+	actual, ok := v.(io.Reader)
 	require.True(t, ok)
-	assert.Equal(t, expected, actual)
+	assert.Equal(t, ioutil.NopCloser(expected), actual)
 }

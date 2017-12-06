@@ -35,6 +35,16 @@ func (c *container) uploadFile(
 	return outputPort.UploadFile(file.ID)
 }
 
+func (c *container) downloadFile(
+	params *ports.DownloadFileParams,
+	outputPort ports.ServerOutputPort,
+	storagePort ports.StoragePort,
+	blockchainPort ports.BlockchainPort,
+	fileRepository repositories.FileRepository,
+) (*ports.DownloadFileResponse, error) {
+	return nil, nil
+}
+
 func newUsecaseContainer(logger *log.Logger, config *config.Config) *container {
 	return &container{
 		logger: logger,

@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/k0kubun/pp"
 	"github.com/ktr0731/cris/config"
 	"github.com/ktr0731/cris/log"
 	"github.com/ktr0731/cris/usecases"
@@ -75,6 +74,7 @@ func (h *FileHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err != nil {
+		h.logger.Printf("[ERR] %s", err)
 		handleError(w, err)
 		return
 	}
@@ -143,7 +143,6 @@ func withLogging(config *config.Config, logger *log.Logger, h http.Handler) http
 }
 
 func handleError(w http.ResponseWriter, err error) {
-	pp.Println(err)
 	if _, ok := err.(usecases.ClientError); ok {
 		w.WriteHeader(http.StatusBadRequest)
 	} else {

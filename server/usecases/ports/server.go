@@ -3,7 +3,7 @@ package ports
 import (
 	"io"
 
-	"github.com/ktr0731/cris/domain/entities"
+	"github.com/ktr0731/cris/server/domain/entities"
 )
 
 type ServerInputPort interface {

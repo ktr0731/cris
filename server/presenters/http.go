@@ -4,10 +4,10 @@ import (
 	"io"
 	"io/ioutil"
 
-	"github.com/ktr0731/cris/config"
-	"github.com/ktr0731/cris/domain/entities"
-	"github.com/ktr0731/cris/log"
-	"github.com/ktr0731/cris/usecases/ports"
+	"github.com/ktr0731/cris/server/config"
+	"github.com/ktr0731/cris/server/domain/entities"
+	"github.com/ktr0731/cris/server/log"
+	"github.com/ktr0731/cris/server/usecases/ports"
 )
 
 type HTTPPresenter struct {

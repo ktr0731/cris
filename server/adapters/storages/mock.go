@@ -6,9 +6,9 @@ import (
 	"io"
 	"io/ioutil"
 
-	"github.com/ktr0731/cris/domain/repositories"
-	"github.com/ktr0731/cris/usecases"
-	"github.com/ktr0731/cris/utils"
+	"github.com/ktr0731/cris/server/domain/repositories"
+	"github.com/ktr0731/cris/server/usecases"
+	"github.com/ktr0731/cris/server/utils"
 
 	"golang.org/x/sync/syncmap"
 )

@@ -1,10 +1,10 @@
 package repositories
 
 import (
-	"github.com/ktr0731/cris/config"
-	"github.com/ktr0731/cris/domain/entities"
-	"github.com/ktr0731/cris/domain/repositories"
-	"github.com/ktr0731/cris/log"
+	"github.com/ktr0731/cris/server/config"
+	"github.com/ktr0731/cris/server/domain/entities"
+	"github.com/ktr0731/cris/server/domain/repositories"
+	"github.com/ktr0731/cris/server/log"
 	"golang.org/x/sync/syncmap"
 )
 

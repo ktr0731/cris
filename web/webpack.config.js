@@ -18,6 +18,9 @@ module.exports = {
         API_SERVER: "'https://mirage.syfm.space'",
     })
   ],
+  node: {
+      fs: 'empty'
+  },
   module: {
     rules: [
       {

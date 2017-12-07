@@ -1,6 +1,6 @@
 package repositories
 
-import "github.com/ktr0731/cris/domain/entities"
+import "github.com/ktr0731/cris/server/domain/entities"
 
 type FileRepository interface {
 	Store(*entities.File) (entities.FileID, error)

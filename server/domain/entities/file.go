@@ -1,6 +1,6 @@
 package entities
 
-import "github.com/ktr0731/cris/utils"
+import "github.com/ktr0731/cris/server/utils"
 
 type FileID string
 

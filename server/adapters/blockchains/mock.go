@@ -5,7 +5,7 @@ import (
 	"io"
 	"io/ioutil"
 
-	"github.com/ktr0731/cris/usecases/dto"
+	"github.com/ktr0731/cris/server/usecases/dto"
 	"golang.org/x/sync/syncmap"
 )
 

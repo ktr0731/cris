@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/ktr0731/cris/config"
+	"github.com/ktr0731/cris/server/config"
 )
 
 type Logger struct {

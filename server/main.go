@@ -1,16 +1,15 @@
 package main
 
 import (
-	"github.com/k0kubun/pp"
-	"github.com/ktr0731/cris/adapters/blockchains"
-	"github.com/ktr0731/cris/adapters/crypto"
-	"github.com/ktr0731/cris/adapters/repositories"
-	"github.com/ktr0731/cris/adapters/servers"
-	"github.com/ktr0731/cris/adapters/storages"
-	"github.com/ktr0731/cris/config"
-	"github.com/ktr0731/cris/log"
-	"github.com/ktr0731/cris/presenters"
-	"github.com/ktr0731/cris/usecases"
+	"github.com/ktr0731/cris/server/adapters/blockchains"
+	"github.com/ktr0731/cris/server/adapters/crypto"
+	"github.com/ktr0731/cris/server/adapters/repositories"
+	"github.com/ktr0731/cris/server/adapters/servers"
+	"github.com/ktr0731/cris/server/adapters/storages"
+	"github.com/ktr0731/cris/server/config"
+	"github.com/ktr0731/cris/server/log"
+	"github.com/ktr0731/cris/server/presenters"
+	"github.com/ktr0731/cris/server/usecases"
 )
 
 func main() {
@@ -20,8 +19,6 @@ func main() {
 		panic(err)
 	}
 	defer logger.Close()
-
-	pp.Println(config)
 
 	interactor := usecases.NewInteractor(
 		logger,

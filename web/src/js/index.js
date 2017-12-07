@@ -2,39 +2,16 @@ import 'riot';
 
 import '../tags/app.tag';
 import '../tags/upload.tag';
+import '../tags/status.tag';
 
-import Web3 from 'web3';
-import ed25519 from 'ed25519-supercop';
+import 'riot-mui';
 
-const provider = Web3.currentProvider || 'http://localhost:8545';
-const web3 = new Web3(provider);
+import Store from './stores/store';
+import APIClient from './clients/api';
+import EthClient from './clients/ethereum';
 
-const init = () => {
-    if (
-        !localStorage['address'] ||
-        !localStorage['pubkey'] ||
-        !localStorage['privkey']
-    ) {
-        createAccount().then;
-    }
-
-    riot.mount('*');
-};
-
-const createAccount = () => {
-    return new Promise((resolve, reject) => {
-        const pair = ed25519.createKeyPair(ed25519.createSeed());
-        web3.eth.personal.newAccount(pair.secretKey, (err, address) => {
-            if (err) {
-                reject(err);
-            }
-
-            localStorage['address'] = address;
-            localStorage['pubkey'] = pair.pubkey;
-            localStorage['privkey'] = pair.secretKey;
-            resolve();
-        });
-    });
-};
-
-init();
+riot.mount('*', {
+    store: new Store(),
+    apiClient: new APIClient(),
+    ethClient: new EthClient()
+});

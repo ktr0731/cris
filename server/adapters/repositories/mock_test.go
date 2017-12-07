@@ -3,7 +3,7 @@ package repositories
 import (
 	"testing"
 
-	"github.com/ktr0731/cris/domain/entities"
+	"github.com/ktr0731/cris/server/domain/entities"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

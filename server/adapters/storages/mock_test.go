@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ktr0731/cris/usecases"
+	"github.com/ktr0731/cris/server/usecases"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

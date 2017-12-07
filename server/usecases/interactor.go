@@ -1,10 +1,10 @@
 package usecases
 
 import (
-	"github.com/ktr0731/cris/config"
-	"github.com/ktr0731/cris/domain/repositories"
-	"github.com/ktr0731/cris/log"
-	"github.com/ktr0731/cris/usecases/ports"
+	"github.com/ktr0731/cris/server/config"
+	"github.com/ktr0731/cris/server/domain/repositories"
+	"github.com/ktr0731/cris/server/log"
+	"github.com/ktr0731/cris/server/usecases/ports"
 )
 
 // interactor はすべての依存を解決する役割を持つ

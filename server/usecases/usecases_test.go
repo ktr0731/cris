@@ -6,10 +6,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ktr0731/cris/adapters/blockchains"
-	"github.com/ktr0731/cris/adapters/repositories"
-	"github.com/ktr0731/cris/domain/entities"
-	"github.com/ktr0731/cris/usecases/ports"
+	"github.com/ktr0731/cris/server/adapters/blockchains"
+	"github.com/ktr0731/cris/server/adapters/repositories"
+	"github.com/ktr0731/cris/server/domain/entities"
+	"github.com/ktr0731/cris/server/usecases/ports"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

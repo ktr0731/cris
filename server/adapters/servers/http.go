@@ -6,11 +6,12 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/ktr0731/cris/config"
-	"github.com/ktr0731/cris/domain/entities"
-	"github.com/ktr0731/cris/log"
-	"github.com/ktr0731/cris/usecases"
-	"github.com/ktr0731/cris/usecases/ports"
+	"github.com/ktr0731/cris/server/config"
+	"github.com/ktr0731/cris/server/domain/entities"
+	"github.com/ktr0731/cris/server/log"
+	"github.com/ktr0731/cris/server/usecases"
+	"github.com/ktr0731/cris/server/usecases/ports"
+	"github.com/rs/cors"
 )
 
 type Server struct {
@@ -32,7 +33,7 @@ func NewHTTPServer(logger *log.Logger, config *config.Config, inputPort ports.Se
 
 func (s *Server) Listen() error {
 	s.logger.Printf("Server listen in %s%s", s.getPrefix(), s.getAddr())
-	return http.ListenAndServe(s.getAddr(), s.mux)
+	return http.ListenAndServe(s.getAddr(), cors.Default().Handler(s.mux))
 }
 
 func (s *Server) getPrefix() string {
@@ -87,10 +88,13 @@ func (h *FileHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *FileHandler) uploadFile(w http.ResponseWriter, r *http.Request) (interface{}, error) {
-	defer r.Body.Close()
+	f, _, err := r.FormFile("content")
+	if err != nil {
+		return nil, err
+	}
 
 	return h.inputPort.UploadFile(&ports.UploadFileParams{
-		Content: r.Body,
+		Content: f,
 	})
 }
 

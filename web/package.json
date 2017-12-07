@@ -7,6 +7,7 @@
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-preset-es2015-riot": "^1.1.0",
+    "ed25519-supercop": "^1.0.2",
     "riot": "^3.7.4",
     "riot-tag-loader": "^1.0.0",
     "web3": "^1.0.0-beta.26",
@@ -14,6 +15,7 @@
     "webpack-dev-server": "^2.9.5"
   },
   "devDependencies": {
-    "babel-plugin-transform-es3-member-expression-literals": "^6.22.0"
+    "babel-plugin-transform-es3-member-expression-literals": "^6.22.0",
+    "prettier": "1.9.1"
   }
 }

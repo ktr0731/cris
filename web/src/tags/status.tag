@@ -1,5 +1,5 @@
 <status>
-    <p>{ address } ({ pubkey })</p>
+    <p>Uploaded files:</p>
 
     <script>
         import 'riot';
@@ -10,13 +10,6 @@
             console.log(store)
 
             self.store = store;
-
-            self.store.on('get_account', res => {
-                self.address = res.address;
-                self.pubkey = res.pubkey;
-                self.update();
-            })
-
         }
     </script>
 </status>

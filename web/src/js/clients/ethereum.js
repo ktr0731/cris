@@ -4,7 +4,7 @@ import Web3 from 'web3';
 
 export default class {
     constructor() {
-        const provider = Web3.currentProvider || 'http://localhost:8545';
+        const provider = Web3.currentProvider || 'http://0.0.0.0:8545';
         this.web3 = new Web3(provider);
     }
 

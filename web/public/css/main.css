@@ -23,3 +23,12 @@ app {
   width: 700px;
   margin: 0 auto;
 }
+
+.uploader-wrapper p {
+  display: block;
+  text-align: center;
+  vertical-align: center;
+  padding: 100px 20px;
+  border: solid 1px #ccc;
+  background: #efefef;
+}

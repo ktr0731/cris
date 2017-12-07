@@ -3,27 +3,31 @@
         <div class="logo"><a href="#">CRIS</a></div>
     </material-navbar>
 
-    <status></status>
-
     <div id="container">
+        <p><span>ETH : </span><span>{ address }</span></p>
+
         <upload></upload>
+
+        <status></status>
     </div>
 
     <script>
-        import Web3 from 'web3';
-        import 'riot';
-        const web3 = new Web3(Web3.currentProvider);
         import showStatus from '../js/actions/status';
 
         const self = this;
         self.opts = opts;
 
+        opts.store.on('get_account', res => {
+            self.address = res.address;
+            self.update();
+        })
+
         self.on('mount', () => {
             console.log(self.tags)
-            self.tags['status'].init(opts.store)
 
             showStatus(opts.store, opts.ethClient)
         })
+
     </script>
 
     <style>

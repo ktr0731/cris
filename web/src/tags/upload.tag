@@ -1,6 +1,11 @@
 <upload>
     <div>
-        <input onchange={ change } type="file" name="content">
+        <input id="uploader" onchange={ change } type="file" name="content" style="display: none">
+        <label for="uploader">
+            <div class="uploader-wrapper">
+                <p>ファイルをアップロードする</p>
+            </div>
+        </label>
     </div>
     <material-button class="ui">
         <div class="text">️Submit</div>

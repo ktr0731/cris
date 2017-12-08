@@ -1,22 +1,24 @@
 import Web3 from 'web3';
 
 import Cris from '../../../contracts/Cris.sol';
+import ed25519 from 'supercop.js';
+import generatePassword from 'password-generator';
 
 export default class {
     constructor() {
-        const provider =
-            Web3.currentProvider ||
-            new Web3.providers.HttpProvider('http://localhost:8545');
+        console.log('init eth client');
+        const provider = new Web3.providers.HttpProvider(
+            'http://localhost:8545'
+        );
 
         Cris.setProvider(provider);
         this.cris = Cris.deployed();
-        this.web3 = new Web3();
-
-        // this.unlock();
+        this.web3 = new Web3(provider);
     }
 
     createAccount() {
         return new Promise((resolve, reject) => {
+            console.log('create new account');
             const pair = ed25519.createKeyPair(ed25519.createSeed());
 
             const password = generatePassword(32);
@@ -52,6 +54,7 @@ export default class {
     }
 
     store(hash) {
+        this.unlock();
         return this.cris.store(hash, { from: localStorage['address'] });
     }
 }

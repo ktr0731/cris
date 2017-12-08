@@ -13,8 +13,13 @@
 
         self.on('mount', () => {
             self.files = [];
+
+            self.parent.opts.store.on('set_uploaded_files', files => {
+                self.files = files;
+                self.update();
+            })
+
             self.parent.opts.store.on('add_uploaded_file', file => {
-                self.files.push(file);
                 self.update();
             });
         });

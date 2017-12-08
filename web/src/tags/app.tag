@@ -23,8 +23,11 @@
         });
 
         self.on('mount', () => {
-            showStatus(opts.store, opts.ethClient);
-        })
+            self.tags['status'].on('mount', () => {
+                showStatus(opts.store, opts.ethClient);
+            });
+        });
+
 
     </script>
 

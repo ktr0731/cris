@@ -5,6 +5,7 @@ import ed25519 from 'supercop.js';
 export default (file, store) => {
     // TODO: send signature also
     let hash = null;
+    let token = null;
     return new Promise((resolve, _) => {
         const reader = new FileReader();
         reader.onload = e => {
@@ -28,16 +29,17 @@ export default (file, store) => {
         .then(new APIClient().upload)
         .then(res => res.json())
         .then(res => {
-            console.log('FOO');
+            token = res.token;
+            return new EthClient().store(hash);
+        })
+        .then(hash => {
+            console.log(hash);
             store.addUploadedFile({
                 name: file.name,
                 hash: hash,
-                token: res.token,
+                token: token,
+                txHash: hash,
                 date: file.lastModifiedDate
             });
         });
-    // .then(() => {
-    //     console.log('FOO');
-    //     return new EthClient().store(hash);
-    // });
 };

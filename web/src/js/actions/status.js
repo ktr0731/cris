@@ -15,4 +15,5 @@ export default (store, ethClient) => {
     }
 
     store.setAccount(account);
+    store.setUploadedFiles();
 };

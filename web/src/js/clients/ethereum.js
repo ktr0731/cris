@@ -3,6 +3,7 @@ import Web3 from 'web3';
 import Cris from '../../../contracts/Cris.sol';
 import ed25519 from 'supercop.js';
 import generatePassword from 'password-generator';
+import { Base64 } from 'js-base64';
 
 export default class {
     constructor() {
@@ -31,8 +32,8 @@ export default class {
 
                 resolve({
                     address: address,
-                    pubkey: pair.publicKey,
-                    privkey: pair.secretKey
+                    pubkey: Base64.encodeURI(pair.publicKey),
+                    privkey: Base64.encodeURI(pair.secretKey)
                 });
             });
         });

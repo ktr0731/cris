@@ -2,14 +2,22 @@
     <p>Uploaded files:</p>
     <table>
         <tr each={ files }>
-            <td class="name">{ name }</td><td class="hash">{ "0x" + hash.slice(0, 31) }</td>
+            <td class="name">
+                <button data-clipboard-text={"http://localhost:9000/v1/files/" + Base64.encodeURI(token + "." + txHash + "." + localStorage['privkey'])}></button>
+                { name }
+            </td>
+            <td class="hash">{ txHash.slice(0, 31) }</td>
         </tr>
     </table>
 
     <script>
+        import { Base64 } from 'js-base64';
+        import Clipboard from 'clipboard';
         import 'riot';
 
         const self = this;
+
+        new Clipboard('button');
 
         self.on('mount', () => {
             self.files = [];

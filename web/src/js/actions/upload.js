@@ -1,6 +1,7 @@
 import APIClient from '../clients/api';
 import EthClient from '../clients/ethereum';
 import ed25519 from 'supercop.js';
+import { Base64 } from 'js-base64';
 
 export default (file, store) => {
     // TODO: send signature also
@@ -9,12 +10,14 @@ export default (file, store) => {
     return new Promise((resolve, _) => {
         const reader = new FileReader();
         reader.onload = e => {
+            const pubkey = Base64.decode(localStorage['pubkey']);
+            const privkey = Base64.decode(localStorage['privkey']);
             const contentBuf = new Buffer(reader.result.length);
-            const pubkeyBuf = new Buffer(localStorage['pubkey'].length);
-            const privkeyBuf = new Buffer(localStorage['privkey'].length);
+            const pubkeyBuf = new Buffer(pubkey.length);
+            const privkeyBuf = new Buffer(privkey.length);
             contentBuf.fill(reader.result);
-            pubkeyBuf.fill(localStorage['pubkey']);
-            privkeyBuf.fill(localStorage['privkey']);
+            pubkeyBuf.fill(pubkey);
+            privkeyBuf.fill(privkey);
             const encryptedContent = ed25519.sign(
                 contentBuf,
                 pubkeyBuf,

@@ -6,6 +6,8 @@ import '../tags/status.tag';
 
 import 'riot-mui';
 
+import 'clipboard';
+
 import Store from './stores/store';
 import APIClient from './clients/api';
 import EthClient from './clients/ethereum';

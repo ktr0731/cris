@@ -32,8 +32,9 @@
     </script>
 
     <style>
-        material-navbar {
-            padding: 0 350px;
+        .nav-wrapper {
+            width: 700px;
+            margin: 0 auto;
         }
     </style>
 </app>

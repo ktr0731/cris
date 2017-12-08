@@ -55,4 +55,5 @@ jspm_packages
 .node_repl_history
 
 web/public/js/app.js
-web/ethereum/build
+web/build
+web/.truffle-solidity-loader

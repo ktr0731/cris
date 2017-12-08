@@ -11,13 +11,6 @@ contract Cris {
         admin = msg.sender;
     }
 
-    modifier adminOnly() {
-        if (msg.sender == admin) {
-            _;
-        }
-    }
-
-    event Store(bool isError);
     function store(string hash) public {
       fileOwner[hash] = msg.sender;
     }

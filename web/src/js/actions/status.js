@@ -1,5 +1,3 @@
-import store from '../stores/store';
-
 export default (store, ethClient) => {
     let account = {
         address: localStorage['address'],

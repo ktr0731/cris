@@ -15,7 +15,6 @@
     <script>
         import upload from '../js/actions/upload';
 
-
         change (e) {
             const self = this;
 
@@ -26,7 +25,7 @@
             form.style.display = 'none';
 
 
-            upload(e.target.files[0])
+            upload(e.target.files[0], self.parent.opts.store)
                 .then(() => {
                     setTimeout(() => {
                         el.style.display = 'none';

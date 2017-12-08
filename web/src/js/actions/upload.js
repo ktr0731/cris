@@ -1,10 +1,11 @@
 import APIClient from '../clients/api';
-import sjcl from 'sjcl';
+import EthClient from '../clients/ethereum';
 import ed25519 from 'supercop.js';
 
 export default (file, store) => {
     // TODO: send signature also
-    return new Promise((resolve, reject) => {
+    let hash = null;
+    return new Promise((resolve, _) => {
         const reader = new FileReader();
         reader.onload = e => {
             const contentBuf = new Buffer(reader.result.length);
@@ -18,13 +19,25 @@ export default (file, store) => {
                 pubkeyBuf,
                 privkeyBuf
             );
-            console.log(
-                'HASH:',
-                sjcl.codec.hex.fromBits(sjcl.hash.sha256.hash(encryptedContent))
-            );
+            hash = Buffer.from(encryptedContent).toString('hex');
 
-            resolve(encryptedContent);
+            return resolve(encryptedContent);
         };
         reader.readAsText(file);
-    }).then(new APIClient().upload);
+    })
+        .then(new APIClient().upload)
+        .then(res => res.json())
+        .then(res => {
+            console.log('FOO');
+            store.addUploadedFile({
+                name: file.name,
+                hash: hash,
+                token: res.token,
+                date: file.lastModifiedDate
+            });
+        });
+    // .then(() => {
+    //     console.log('FOO');
+    //     return new EthClient().store(hash);
+    // });
 };

@@ -6,8 +6,6 @@ export default class {
             mode: 'cors',
             method: 'POST',
             body: file
-        }).then(res => {
-            console.log('done: ', res);
         });
     }
 }

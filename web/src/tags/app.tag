@@ -20,7 +20,7 @@
         opts.store.on('get_account', res => {
             self.address = res.address;
             self.update();
-        })
+        });
 
         self.on('mount', () => {
             showStatus(opts.store, opts.ethClient);

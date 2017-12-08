@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/k0kubun/pp"
 	"github.com/ktr0731/cris/server/config"
 	"github.com/ktr0731/cris/server/domain/entities"
 	"github.com/ktr0731/cris/server/log"
@@ -79,6 +80,8 @@ func (h *FileHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		handleError(w, err)
 		return
 	}
+
+	pp.Println(res)
 
 	if err := json.NewEncoder(w).Encode(res); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)

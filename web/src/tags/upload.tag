@@ -14,16 +14,17 @@
 
     <script>
         import upload from '../js/actions/upload';
-        import sha256 from 'js-sha256';
 
 
         change (e) {
-            console.log(sha256(e.target.files[0]))
+            const self = this;
+
             const el = document.querySelector('material-spinner');
             const form = document.querySelector('#form');
 
             el.style.display = 'flex';
             form.style.display = 'none';
+
 
             upload(e.target.files[0])
                 .then(() => {

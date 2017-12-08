@@ -17,9 +17,10 @@
     "riot": "^3.7.4",
     "riot-mui": "^0.1.1",
     "riot-tag-loader": "^1.0.0",
+    "sjcl": "^1.0.7",
     "supercop.js": "^2.0.1",
     "truffle-solidity-loader": "^0.0.8",
-    "web3": "^1.0.0-beta.26",
+    "web3": "^0.17.0-alpha",
     "webpack": "^3.10.0",
     "webpack-dev-server": "^2.9.5"
   },

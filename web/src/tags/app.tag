@@ -23,9 +23,7 @@
         })
 
         self.on('mount', () => {
-            console.log(self.tags)
-
-            showStatus(opts.store, opts.ethClient)
+            showStatus(opts.store, opts.ethClient);
         })
 
     </script>

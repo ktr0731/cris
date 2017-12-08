@@ -2,10 +2,13 @@ import ed25519 from 'supercop.js';
 import generatePassword from 'password-generator';
 import Web3 from 'web3';
 
+import Cris from '../Cris.sol';
+
 export default class {
     constructor() {
         const provider = Web3.currentProvider || 'http://0.0.0.0:8545';
         this.web3 = new Web3(provider);
+        new Cris();
     }
 
     createAccount() {

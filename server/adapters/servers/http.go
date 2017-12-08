@@ -88,13 +88,10 @@ func (h *FileHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *FileHandler) uploadFile(w http.ResponseWriter, r *http.Request) (interface{}, error) {
-	f, _, err := r.FormFile("content")
-	if err != nil {
-		return nil, err
-	}
+	defer r.Body.Close()
 
 	return h.inputPort.UploadFile(&ports.UploadFileParams{
-		Content: f,
+		Content: r.Body,
 	})
 }
 

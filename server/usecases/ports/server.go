@@ -12,7 +12,9 @@ type ServerInputPort interface {
 }
 
 type UploadFileParams struct {
-	Content io.Reader
+	Content   io.Reader
+	Signature []byte
+	PubKey    []byte
 }
 
 type DownloadFileParams struct {

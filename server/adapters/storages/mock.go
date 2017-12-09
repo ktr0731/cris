@@ -1,11 +1,13 @@
 package storages
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
 
+	"github.com/k0kubun/pp"
 	"github.com/ktr0731/cris/server/domain/repositories"
 	"github.com/ktr0731/cris/server/usecases"
 	"github.com/ktr0731/cris/server/utils"
@@ -29,7 +31,7 @@ func (s *MockStorageAdapter) Upload(name string, content io.Reader) (string, err
 		return "", usecases.ErrEmptyContent
 	}
 
-	s.storage.Store(name, content)
+	s.storage.Store(name, b)
 
 	url := fmt.Sprintf("https://example.com/%s", utils.NewUUID())
 	s.url.Store(url, name)
@@ -50,11 +52,12 @@ func (s *MockStorageAdapter) Download(url string) (io.ReadCloser, error) {
 	if !ok {
 		return nil, repositories.ErrNotFound
 	}
-	r, ok := v.(io.Reader)
+	r, ok := v.([]byte)
 	if !ok {
 		return nil, errors.New("type assertion failed")
 	}
-	return ioutil.NopCloser(r), nil
+	pp.Println(r)
+	return ioutil.NopCloser(bytes.NewBuffer(r)), nil
 }
 
 func NewMockStorage() *MockStorageAdapter {

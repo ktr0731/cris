@@ -18,12 +18,12 @@ type Interactor struct {
 }
 
 func (i *Interactor) UploadFile(params *ports.UploadFileParams) (*ports.UploadFileResponse, error) {
-	return i.container.uploadFile(params, i.outputPort, i.storagePort, i.fileRepository)
+	return i.container.uploadFile(params, i.outputPort, i.storagePort, i.cryptoPort, i.fileRepository)
 }
 
 // DownloadFile downloads a file specified by the token
 func (i *Interactor) DownloadFile(params *ports.DownloadFileParams) (*ports.DownloadFileResponse, error) {
-	return i.outputPort.DownloadFile(nil)
+	return i.container.downloadFile(params, i.outputPort, i.storagePort, nil, i.cryptoPort, i.fileRepository)
 }
 
 func NewInteractor(

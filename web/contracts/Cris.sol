@@ -5,17 +5,26 @@ contract Cris {
 
     address public admin;
 
-    mapping (string => address) fileOwner;
+    // mapping (string => address) fileOwner;
+    mapping (string => bool) hasFile;
 
     function Cris() public {
         admin = msg.sender;
     }
 
-    function store(string hash) public {
-      fileOwner[hash] = msg.sender;
+    function store(string fileHash) {
+      // fileOwner[hash] = msg.sender;
+      hasFile[fileHash] = true;
     }
 
-    function isOwner(string hash) public returns (bool) {
-        return msg.sender == fileOwner[hash];
+    // function isOwner(address sender, string hash) public returns (bool) {
+    //     if (sender == fileOwner[hash]) {
+    //         return true;
+    //     }
+    //     return false;
+    // }
+
+    function has(string fileHash) constant returns (bool retVal) {
+        return hasFile[fileHash];
     }
 }

@@ -32,8 +32,8 @@ export default class {
 
                 resolve({
                     address: address,
-                    pubkey: Base64.encodeURI(pair.publicKey),
-                    privkey: Base64.encodeURI(pair.secretKey)
+                    pubkey: Base64.btoa(pair.publicKey.toString('latin1')),
+                    privkey: Base64.btoa(pair.secretKey.toString('latin1'))
                 });
             });
         });
@@ -57,5 +57,13 @@ export default class {
     store(hash) {
         this.unlock();
         return this.cris.store(hash, { from: localStorage['address'] });
+    }
+
+    fetch(_, hash) {
+        console.log('fetch:', hash);
+        this.cris.has.call(hash).then(res => {
+            console.log('has: ', res);
+        });
+        return this.cris.has.call(hash);
     }
 }

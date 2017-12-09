@@ -3,7 +3,7 @@
     <table>
         <tr each={ files }>
             <td class="name">
-                <button data-clipboard-text={"http://localhost:9000/v1/files/" + Base64.encodeURI(token + "." + txHash + "." + localStorage['privkey'])}></button>
+                <button data-clipboard-text={"http://localhost:3000/?url=" + Base64.encodeURI(token + "." + hash + "." + localStorage['privkey'])}></button>
                 { name }
             </td>
             <td class="hash">{ txHash.slice(0, 31) }</td>

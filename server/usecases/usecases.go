@@ -1,6 +1,7 @@
 package usecases
 
 import (
+	"bytes"
 	"io/ioutil"
 
 	"github.com/ktr0731/cris/server/config"
@@ -21,9 +22,20 @@ func (c *container) uploadFile(
 	params *ports.UploadFileParams,
 	outputPort ports.ServerOutputPort,
 	storagePort ports.StoragePort,
+	cryptoPort ports.CryptoPort,
 	fileRepository repositories.FileRepository,
 ) (*ports.UploadFileResponse, error) {
-	url, err := storagePort.Upload(utils.NewUUID(), params.Content)
+	// 雑
+	content, err := ioutil.ReadAll(params.Content)
+	if err != nil {
+		return nil, err
+	}
+
+	if !cryptoPort.Verify(params.PubKey, content, params.Signature) {
+		return nil, ErrTemperingDetected
+	}
+
+	url, err := storagePort.Upload(utils.NewUUID(), bytes.NewBuffer(content))
 	if err != nil {
 		return nil, err
 	}
@@ -45,10 +57,10 @@ func (c *container) downloadFile(
 	cryptoPort ports.CryptoPort,
 	fileRepository repositories.FileRepository,
 ) (*ports.DownloadFileResponse, error) {
-	tx, err := blockchainPort.FindTxByHash(params.TxHash)
-	if err != nil {
-		return nil, err
-	}
+	// tx, err := blockchainPort.FindTxByHash(params.TxHash)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
 	file, err := fileRepository.Find(params.Token)
 	if err != nil {
@@ -61,18 +73,16 @@ func (c *container) downloadFile(
 	}
 	defer res.Close()
 
-	b, err := ioutil.ReadAll(res)
-	if err != nil {
-		return nil, err
-	}
+	// _, err := ioutil.ReadAll(res)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
-	if cryptoPort.HashDigest(b) != tx.HashedData {
-		return nil, ErrTemperingDetected
-	}
+	// if cryptoPort.HashDigest(b) != tx.HashedData {
+	// 	return nil, ErrTemperingDetected
+	// }
 
-	return &ports.DownloadFileResponse{
-		Content: b,
-	}, nil
+	return outputPort.DownloadFile(res)
 }
 
 func newUsecaseContainer(logger *log.Logger, config *config.Config) *container {

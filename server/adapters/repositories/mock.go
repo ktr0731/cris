@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"github.com/k0kubun/pp"
 	"github.com/ktr0731/cris/server/config"
 	"github.com/ktr0731/cris/server/domain/entities"
 	"github.com/ktr0731/cris/server/domain/repositories"
@@ -24,6 +25,7 @@ func NewMockFileRepository(logger *log.Logger, config *config.Config) *MockFileR
 
 func (r *MockFileRepositoryAdapter) Store(e *entities.File) (entities.FileID, error) {
 	r.storage.Store(e.ID, e)
+	r.logger.Printf("[MockFileRepo] stored an entity: %s", e.ID)
 	return e.ID, nil
 }
 
@@ -36,6 +38,7 @@ func (r *MockFileRepositoryAdapter) Find(id entities.FileID) (*entities.File, er
 	if !ok {
 		return nil, repositories.ErrNotFound
 	}
+	pp.Println(e)
 	return e, nil
 }
 
@@ -45,5 +48,6 @@ func (r *MockFileRepositoryAdapter) Remove(id entities.FileID) (*entities.File, 
 		return nil, err
 	}
 	r.storage.Delete(id)
+	r.logger.Printf("[MockFileRepo] remove an entity: %s", e.ID)
 	return e, nil
 }

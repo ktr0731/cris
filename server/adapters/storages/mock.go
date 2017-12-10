@@ -7,7 +7,6 @@ import (
 	"io"
 	"io/ioutil"
 
-	"github.com/k0kubun/pp"
 	"github.com/ktr0731/cris/server/domain/repositories"
 	"github.com/ktr0731/cris/server/usecases"
 	"github.com/ktr0731/cris/server/utils"
@@ -56,7 +55,6 @@ func (s *MockStorageAdapter) Download(url string) (io.ReadCloser, error) {
 	if !ok {
 		return nil, errors.New("type assertion failed")
 	}
-	pp.Println(r)
 	return ioutil.NopCloser(bytes.NewBuffer(r)), nil
 }
 

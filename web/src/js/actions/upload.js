@@ -6,9 +6,9 @@ import ab2buf from 'arraybuffer-to-buffer';
 import { sha3_256 } from 'js-sha3';
 
 export default (file, store) => {
-    // TODO: send signature also
     let signature = null;
     let token = null;
+    let hash = null;
     return new Promise((resolve, _) => {
         const reader = new FileReader();
         reader.onload = e => {
@@ -21,17 +21,9 @@ export default (file, store) => {
                 'latin1'
             );
             const contentBuf = ab2buf(reader.result);
-            // const pubkeyBuf = new Buffer(pubkey.length);
-            // const privkeyBuf = new Buffer(privkey.length);
-            // pubkeyBuf.fill(pubkey);
-            // privkeyBuf.fill(privkey);
-            // signature = ed25519.sign(contentBuf, pubkeyBuf, privkeyBuf);
             signature = ed25519.sign(contentBuf, pubkey, privkey);
-
-            console.log(
-                pubkey.toString('hex'),
-                sha3_256(Buffer.from(contentBuf).toString())
-            );
+            hash = sha3_256(contentBuf);
+            console.log(hash);
 
             return resolve(contentBuf);
         };

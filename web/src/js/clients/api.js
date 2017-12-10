@@ -1,5 +1,4 @@
 import { Base64 } from 'js-base64';
-import ab2str from 'arraybuffer-to-string';
 
 export default class {
     constructor() {}

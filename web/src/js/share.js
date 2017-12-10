@@ -1,19 +1,32 @@
 import { Base64 } from 'js-base64';
-import ed25519 from 'supercop.js';
 
 const parseURL = url => {
     return Base64.decode(url).split('.');
 };
 const fetchContent = url => {
-    return fetch(url, { mode: 'cors' }).then(res => res.blob());
+    const headers = new Headers();
+    headers.append(
+        'Accept',
+        'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    );
+    return fetch(url, {
+        mode: 'cors',
+        headers: headers
+    }).then(res => res.blob());
 };
 
 const verifyFileHash = (ethClient, hash) => {
     return ethClient.fetch('', hash);
 };
 
-const decodeContent = encrypted => {
-    //ed25519.veri
+const doDownload = content => {
+    const url = URL.createObjectURL(content);
+    const body = document.querySelector('body');
+    const e = document.createElement('a');
+    e.setAttribute('href', url);
+    e.setAttribute('download', '');
+    body.appendChild(e);
+    e.click();
 };
 
 export default (ethClient, url) => {
@@ -28,10 +41,7 @@ export default (ethClient, url) => {
             }
         })
         .then(() => fetchContent(actualURL))
-        .then(decodeContent)
-        .then(content => {
-            console.log(content);
-        })
+        .then(doDownload)
         .catch(e => {
             console.log(e);
         });

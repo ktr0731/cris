@@ -1,7 +1,6 @@
 package repositories
 
 import (
-	"github.com/k0kubun/pp"
 	"github.com/ktr0731/cris/server/config"
 	"github.com/ktr0731/cris/server/domain/entities"
 	"github.com/ktr0731/cris/server/domain/repositories"
@@ -38,7 +37,6 @@ func (r *MockFileRepositoryAdapter) Find(id entities.FileID) (*entities.File, er
 	if !ok {
 		return nil, repositories.ErrNotFound
 	}
-	pp.Println(e)
 	return e, nil
 }
 

@@ -50,6 +50,7 @@ func (h *DownloadFileHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
+	w.Header().Set("Content-Length", fmt.Sprintf("%d", len(res.Content)))
 	if _, err := w.Write(res.Content); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprintln(w, err)

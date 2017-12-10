@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/k0kubun/pp"
 	"github.com/ktr0731/cris/server/config"
 	"github.com/ktr0731/cris/server/log"
 	"github.com/ktr0731/cris/server/usecases/ports"
@@ -47,7 +46,6 @@ func (h *UploadFileHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		handleError(w, err)
 		return
 	}
-	pp.Println(params)
 
 	content, pubkey, signature := make([]byte, base64.StdEncoding.DecodedLen(len(params.Content))), make([]byte, base64.StdEncoding.DecodedLen(len(params.Pubkey))), make([]byte, base64.StdEncoding.DecodedLen(len(params.Signature)))
 	var err error

@@ -6,6 +6,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 
 	"github.com/ktr0731/cris/server/config"
@@ -41,7 +42,10 @@ func (h *UploadFileHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		Pubkey    string `json:"pubkey"`
 	}{}
 
-	if err := json.NewDecoder(r.Body).Decode(&params); err != nil {
+	// 10 MB
+	reader := io.LimitReader(r.Body, 10000)
+
+	if err := json.NewDecoder(reader).Decode(&params); err != nil {
 		h.logger.Printf("[ERR] %s", err)
 		handleError(w, err)
 		return
